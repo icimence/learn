@@ -27,7 +27,7 @@
 # **本站内容地图**
 ---
 
-![](https://cdn.jsdelivr.net/gh/justacoder99/r2coding@master/img/contentmap.3sdmma4od740.png)
+暂无，完成度一定之后会定期更新地图
 
 ---
 # **编程自学路线+知识大梳理**
