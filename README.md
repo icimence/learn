@@ -1,7 +1,7 @@
 
 
 <p align="center" style="color:blue">
-  <a href="https://mp.weixin.qq.com/s/ePhaYezFblgt0NgbvtWqww" target="_blank">
+  <a href="https://github.com/icimence/learn" target="_blank">
     <h2 align="center">
         网站内容持续更新中...
     </h2>
