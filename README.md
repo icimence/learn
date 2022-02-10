@@ -3,7 +3,7 @@
 <p align="center" style="color:blue">
   <a href="https://github.com/icimence/learn" target="_blank">
     <h2 align="center">
-        网站内容持续更新中...
+        网站内容即将开始更新...
     </h2>
   </a>
 </p>
