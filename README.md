@@ -125,15 +125,109 @@ Java和CPP是经常被用来比较的两种语言，他们有以下这些特征�
 >
 > 这里读者可能会感到奇怪为什么hashCode和equals需要区分，需要说明的是hashCode只是对某个对象的哈希值进行计算，计算的结果完全取决于hashCode的设计算法，糟糕的hashCode算法可能会导致很多不同的对象拥有相同的哈希值，所以并不能使用hashCode函数直接代替equals函数来判断两个对象是否相同。反之，如果使用equals完全替换hashCode理论上是没有任何问题的，但是在处理哈希表相关问题时效率会比较低下，相较于hashCode函数equals的执行速度较为缓慢。
 
+### 基本类型
 
+Java共有基本类型对应的八种包装类分别是`Byte`,`Short`,`Integer`,`Long`,`boolean`,`Float`,`Double`,`Character`。这些包装类中`Byte`,`Short`,`Integer`,`Long`默认创建了在[-128,127]的缓存数据，`Character`则是创建[0,127]的缓存，这也是常量池技术。下面是比较易懂的代码来辅助理解什么是常量池
+
+```java
+    /**
+     * Returns an {@code Integer} instance representing the specified
+     * {@code int} value.  If a new {@code Integer} instance is not
+     * required, this method should generally be used in preference to
+     * the constructor {@link #Integer(int)}, as this method is likely
+     * to yield significantly better space and time performance by
+     * caching frequently requested values.
+     *
+     * This method will always cache values in the range -128 to 127,
+     * inclusive, and may cache other values outside of this range.
+     *
+     * @param  i an {@code int} value.
+     * @return an {@code Integer} instance representing {@code i}.
+     * @since  1.5
+     */
+    public static Integer valueOf(int i) {
+        if (i >= IntegerCache.low && i <= IntegerCache.high)
+            return IntegerCache.cache[i + (-IntegerCache.low)];
+        return new Integer(i);
+    }
+
+    /**
+     * Cache to support the object identity semantics of autoboxing for values between
+     * -128 and 127 (inclusive) as required by JLS.
+     *
+     * The cache is initialized on first usage.  The size of the cache
+     * may be controlled by the {@code -XX:AutoBoxCacheMax=<size>} option.
+     * During VM initialization, java.lang.Integer.IntegerCache.high property
+     * may be set and saved in the private system properties in the
+     * sun.misc.VM class.
+     */
+
+    private static class IntegerCache {
+        static final int low = -128;
+        static final int high;
+        static final Integer cache[];
+
+        static {
+            // high value may be configured by property
+            int h = 127;
+            String integerCacheHighPropValue =
+                sun.misc.VM.getSavedProperty("java.lang.Integer.IntegerCache.high");
+            if (integerCacheHighPropValue != null) {
+                try {
+                    int i = parseInt(integerCacheHighPropValue);
+                    i = Math.max(i, 127);
+                    // Maximum array size is Integer.MAX_VALUE
+                    h = Math.min(i, Integer.MAX_VALUE - (-low) -1);
+                } catch( NumberFormatException nfe) {
+                    // If the property cannot be parsed into an int, ignore it.
+                }
+            }
+            high = h;
+
+            cache = new Integer[(high - low) + 1];
+            int j = low;
+            for(int k = 0; k < cache.length; k++)
+                cache[k] = new Integer(j++);
+
+            // range [-128, 127] must be interned (JLS7 5.1.7)
+            assert IntegerCache.high >= 127;
+        }
+
+        private IntegerCache() {}
+    }
+```
+
+我们可以看到如果超过了一定的范围源码还是会创建新的对象，但是如果需要创建的类型在常量池中已经存在就可以直接进行返回。
+
+需要注意的是如果`Float`和`Double`两种类型并没有实现常量池。
+
+> [!TIP]
+>
+> Java中的==判断符都是通过地址来进行比较的，所以在比较对象的时候需要使用equals函数，举一个简单的例子
+>
+> ```java
+> Integer i1 = 40;
+> Integer i2 = new Integer(40);
+> System.out.println(i1==i2);
+> ```
+>
+> 这个代码的输出结果是false
+>
+> 
+>
+> 同时还有一点需要注意，以上的包装类会自动装箱，在赋值时又会自动拆箱。所以在平时写代码的过程中尽量少使用包装类，以免计算速度的下降
 
 ---
-# **本站开源地址**
+# **本站参考地址**
 ---
 
 ## GitHub开源地址
 
 - [https://github.com/icimence/learn](https://github.com/icimence/learn) **欢迎Star支持**
+
+## 参考网址
+- [https://javaguide.cn/](https://javaguide.cn/)
+
 
 
 ---
